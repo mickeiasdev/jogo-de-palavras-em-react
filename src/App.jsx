@@ -1,5 +1,6 @@
 import "./App.css";
 import { useState } from "react";
+import ListarEstados from "./infra/ibgeEstados";
 
 function App() {
     // Estado que armazena a palavra correta sorteada
@@ -9,52 +10,44 @@ function App() {
     // Estado que armazena o resultado (mensagem: correto ou errado)
     const [resultado, setResultado] = useState("");
 
-    // Lista de palavras grandes usadas no jogo
-    const palavras = [
-        "universidade",
-        "programação",
-        "desenvolver",
-        "computador",
-        "processador",
-        "infraestrutura",
-        "responsável",
-        "comunicação",
-        "tecnologia",
-        "automatizar",
-        "inteligente",
-        "identificador",
-        "revolucionar",
-        "conhecimento",
-        "armazenamento",
-        "implementação",
-        "compreensão",
-        "acessibilidade",
-        "desempenho",
-        "compatível",
-    ];
-
     // Função para iniciar uma nova rodada do jogo
-    const heandleJogar = () => {
+    const heandleJogar = async () => {
+        // Lista de palavras para o jogo
+        const palavras = await ListarEstados(); // Chama a função para listar os estados
+
         // Sorteia uma palavra aleatória
         const index = Math.floor(Math.random() * palavras.length);
-        const sorteada = palavras[index];
-        
+        const sorteada = palavras[index].toUpperCase(); // Converte para maiúsculas
+
         // Embaralha as letras da palavra sorteada
         const embaralhada = sorteada
-            .split("")                        // divide em letras
-            .sort(() => Math.random() - 0.5)  // embaralha aleatoriamente
-            .join("");                        // junta novamente em uma string
+            .split("") // divide em letras
+            .sort(() => Math.random() - 0.5) // embaralha aleatoriamente
+            .join(""); // junta novamente em uma string
+
+        console.log(embaralhada + " - " + sorteada);
 
         // Atualiza os estados com a nova rodada
-        setEmbaralhada(embaralhada);
+        setEmbaralhada(
+            embaralhada
+                .normalize("NFD")
+                .replace(/\p{M}/gu, "")
+                .replaceAll(" ", '"')
+        );
         setPalavra(sorteada);
         setResultado(""); // limpa o resultado anterior
     };
 
     // Função para validar o palpite do usuário
     const heandleValidar = () => {
-        const palpite = document.getElementById("palpite").value;
-        if (palpite === palavra) {
+        // Converte o palpite para maiúsculas e remove acentos
+        const palpite = document
+            .getElementById("palpite")
+            .value.toUpperCase()
+            .normalize("NFD")
+            .replace(/\p{M}/gu, "");
+        // Verifica se o palpite está correto
+        if (palpite === palavra.normalize("NFD").replace(/\p{M}/gu, "")) {
             setResultado("CORRETO!");
         } else {
             setResultado("ERRADO!");
@@ -66,21 +59,29 @@ function App() {
 
     return (
         <div className="App">
-            <h2>Jogo de Palavras</h2>
+            <h1>Jogo de Palavras</h1>
             <p>
                 Neste jogo, você terá que adivinhar qual é a palavra que está
+                <br />
                 sendo apresentada com as letras embaralhadas.
             </p>
+            <p className="alerta">
+                Aspas duplas (") representam um espaço na palavra!
+            </p>
 
-            {/* Botão para iniciar o jogo */}
-            <button onClick={heandleJogar}>Jogar</button>
+            <button className="btnJogar" onClick={heandleJogar}>
+                Nova Palavra
+            </button>
 
-            {/* Exibe a palavra embaralhada e o input de palpite */}
             {embaralhada && (
-                <div>
-                    <h4>{embaralhada}</h4>
-                    <input id="palpite" />
-                    <button onClick={heandleValidar}>Validar</button>
+                <div className="containerPalpite">
+                    <h2>{embaralhada}</h2>
+                    <div>
+                        <input autoComplete="off" id="palpite" />
+                        <button className="btnJogar" onClick={heandleValidar}>
+                            Validar
+                        </button>
+                    </div>
                 </div>
             )}
 

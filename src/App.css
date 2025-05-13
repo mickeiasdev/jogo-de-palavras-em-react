@@ -1,3 +1,74 @@
 * {
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.App {
+    text-align: center;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.alerta {
+    font-weight: bold;
+    color: rgb(255, 58, 58);
+    margin: 10px;
+    font-size: 12px;
+}
+
+.btnJogar {
+    background-color: #904caf;
+    border: 2px solid transparent;
+    color: white;
+    padding: 5px 50px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: all 0.25s ease-in-out;
+}
+
+.btnJogar:hover {
+    border: 2px solid #3c1652;
+    background-color: #7a3f9c;
+}
+
+.containerPalpite {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    color: black;
+    padding: 50px;
+    margin-top: 50px;
+    width: 400px;
+    border-radius: 10px;
+}
+
+.containerPalpite div {
+    display: flex;
+    gap: 10px;
+}
+
+.containerPalpite input {
+    padding: 10px;
+    font-size: 20px;
+    transition: all 0.25s ease-in-out;
+}
+
+.containerPalpite input:focus {
+    border-radius: 10px;
+    outline: none;
+    border: 2px solid #904caf;
+}
+
+h1 {
+  color: #904caf;
+}
+
+h2 {
+    margin: 0;
+    letter-spacing: 2px;
+    font-size: 32px;
 }
